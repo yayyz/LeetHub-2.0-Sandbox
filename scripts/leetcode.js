@@ -42,7 +42,7 @@ let uploadState = { uploading: false };
 
 /* Main function for uploading code to GitHub repo, and callback cb is called if success */
 const upload = (token, hook, code, problem, filename, sha, commitMsg, cb = undefined) => {
-  const URL = `https://api.github.com/repos/${hook}/contents/${problem}/${filename}`;
+  const URL = `https://api.github.com/repos/${hook}/contents/LeetCode/${difficulty}/${directory}/${filename}`;
 
   /* Define Payload */
   let data = {
@@ -138,7 +138,7 @@ const update = (
   shouldPreprendDiscussionPosts,
   cb = undefined,
 ) => {
-  const URL = `https://api.github.com/repos/${hook}/contents/${directory}/${filename}`;
+  const URL = `https://api.github.com/repos/${hook}/contents/LeetCode/${difficulty}/${directory}/${filename}`;
 
   let options = {
     method: 'GET',
@@ -248,7 +248,7 @@ function uploadGit(
 
 /* Gets updated GitHub data for the specific file in repo in question */
 async function getUpdatedData(token, hook, directory, filename) {
-  const URL = `https://api.github.com/repos/${hook}/contents/${directory}/${filename}`;
+  const URL = `https://api.github.com/repos/${hook}/contents/LeetCode/${difficulty}/${directory}/${filename}`;
 
   let options = {
     method: 'GET',
@@ -737,7 +737,16 @@ LeetCodeV2.prototype.getLanguageExtension = function () {
 
   return languages[lang];
 };
-LeetCodeV2.prototype.getNotesIfAny = function () { };
+LeetCodeV2.prototype.getNotesIfAny = function () { 
+  if (!checkElem(document.getElementsByClassName('CodeMirror-code'))) return "";
+
+  text = document.querySelector('.CodeMirror-code').innerText;
+  notes = ""
+  if (text) {
+    notes = `${text.trim()}`.trim();
+  }
+  return notes.trim();
+};
 LeetCodeV2.prototype.getProblemNameSlug = function () {
   const slugTitle = this.submissionData.question.titleSlug;
   const qNum = this.submissionData.question.questionId;
